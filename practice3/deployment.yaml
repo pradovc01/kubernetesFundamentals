@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  custom-dp
+  namespace: dev
+  labels:
+    env: customdev
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      tier: custom
+  template:
+    metadata:
+      name: customstore
+      labels:
+        tier: custom
+    spec:
+      containers: 
+      - name: customstore
+        image: calebespinoza/store-products:3.0
+        ports:
+          - containerPort: 80
