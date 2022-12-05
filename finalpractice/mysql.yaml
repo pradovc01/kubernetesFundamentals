@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  mysql-dp
+  namespace: test
+  labels:
+    env: mysqltest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: mysql-db
+  template:
+    metadata:
+      name: mysql
+      labels:
+        tier: mysql-db
+    spec:
+      containers: 
+      - name: db
+        image: mysql:8.0.21
+        ports:
+          - containerPort: 3306        
+        env:
+          - name: DB_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: mysql-config
+                key: db-name
+          - name: DB_ROOT_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                name: mysql-secret
+                key: db-password-root    
